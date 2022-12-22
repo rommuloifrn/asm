@@ -21,7 +21,6 @@ end:
 # Input: $4
 # Output: $4
 # Doesnt check anything
-
 sqr:	mul $4 $4 $4 # Multiplies the input by itself
 	jr $31
 	
@@ -30,7 +29,6 @@ sqr:	mul $4 $4 $4 # Multiplies the input by itself
 # Input: $4
 # Output: $4
 # obs.: If the input is lower than 2, returns 42
-
 fatboy:	slti $8 $4 2
 	beq $8 1 wtf
 	add $8 $4 -1
