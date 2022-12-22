@@ -10,7 +10,7 @@ addi $14 $0 20	# Stores 20 on $14
 
 lui $9 0x1001 	# Stores hex 1001 on the higher value decimal places on $9
 
-sw  $14 16($9)	# sw (store word) here stores in address 4+$9 the data that is on $14
+sw  $14 16($9)	# sw (store word) here stores in address constant(each value uses 4 so 16 is the fourth space)+$9 the data that is on $14
 lw $8 4($9)	# lw (load word) here stores in $8 the data that is on the adress $9+4 (0x1001)
 
 add $4 $0 $8	#
