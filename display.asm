@@ -8,7 +8,7 @@ main:
 	lui $15 0x1001		# Stores 0x1001 (start adress) on the upper decimal places of $15
 	addi $9 $0 32768
 	addi $8 $0 0x2222ff	# Stores a shade of blue in $8
-	jal bg
+	jal gbga
 	
 	lui $15 0x1001
 	
@@ -31,7 +31,7 @@ end:
 	addi $2 $0 10
 	syscall
 
-# Module to change the background of the 512x256
+# Module to change the background of the 512x256 display
 # Input: $8 as the color
 # 	 $15 as the pixel
 #	 $9 as the pixel amount
@@ -40,6 +40,39 @@ bg:
 	addi $15 $15 4
 	addi $9 $9 -4
 	bne $9 0 bg
+	jr $31
+	
+# Module to change the background of the 512x256 display, with gradient
+# Input: $8 as the color
+# 	 $15 as the pixel
+#	 $9 as the pixel amount
+# 	 $6 as line width (graphical units)
+gbg:
+	sw $8 0($15)
+	addi $15 $15 4
+	addi $9 $9 -4
+	div $15 $6
+	mfhi $13
+	beq $13 0 color
+	colorcontinue:
+	bne $9 0 gbg
+	jr $31
+	color:
+	addi $8 $8 0x0010
+	j colorcontinue
+	
+# strange instance of gbg
+gbga:
+	sw $8 0($15)
+	addi $15 $15 4
+	addi $9 $9 -4
+	
+	div $15 $6
+	mfhi $13
+	slti $13 $13 2
+	add $8 $8 $13
+	
+	bne $9 0 gbga
 	jr $31
 	
 
