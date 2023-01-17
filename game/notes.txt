@@ -1,0 +1,7 @@
+tasks:
+    make a gradient background
+    make blinking stars
+
+r: 94  | 42  21 10 5  1
+g: 192 | 96  48 24 12 2
+b: 245 | 122 61 30 15 3
