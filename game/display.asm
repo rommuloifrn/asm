@@ -1,4 +1,6 @@
 # A program i made to learn about display and graphical interface.
+# Made to a 128x64 screen
+
 .data
 .word 
 
@@ -23,6 +25,15 @@ main:
 	addi $9 $0 32768	# Stores rect last pixel
 	jal rect
 	
+	lui $15 0x1001
+	addi $5 $0 10 # line
+	addi $7 $0 70 # column
+	jal fepads
+	
+	
+	addi $8 $0 0xffffff
+	add $15 $0 $2 		# Stores
+	sw $8 0($15)
 	
 	
 	
@@ -30,14 +41,19 @@ main:
 end:
 	addi $2 $0 10
 	syscall
+	
+	
+# Module to put a white point on screen
+# Input: $15 as the pixel
+# 
 
-# Module to change the background of the 512x256 display
+# Module to change the background of the 128x64 display
 # Input: $8 as the color
 # 	 $15 as the pixel
 #	 $9 as the pixel amount
 bg:
 	sw $8 0($15)
-	addi $15 $15 4
+	addi $15 $15 4 # moves from one pixel to another
 	addi $9 $9 -4
 	bne $9 0 bg
 	jr $31
@@ -66,41 +82,6 @@ bgaaa:
 	addi $8 $8 0x020406
 	j comeback
 	
-	
-# Module to change the background of the 512x256 display, with gradient
-# Input: $8 as the color
-# 	 $15 as the pixel
-#	 $9 as the pixel amount
-# 	 $6 as line width (graphical units)
-gbg:
-	sw $8 0($15)
-	addi $15 $15 4
-	addi $9 $9 -4
-	div $15 $6
-	mfhi $13
-	beq $13 0 color
-	colorcontinue:
-	bne $9 0 gbg
-	jr $31
-	color:
-	addi $8 $8 0x0010
-	j colorcontinue
-	
-# strange instance of gbg
-gbga:
-	sw $8 0($15)
-	addi $15 $15 4
-	addi $9 $9 -4
-	
-	div $15 $6
-	mfhi $13
-	slti $13 $13 2
-	add $8 $8 $13
-	
-	bne $9 0 gbga
-	jr $31
-	
-
 # Module to print a massive rectangle from 2 pixels ($15 and $9)
 # Input: $8 as the color
 # 	 $15 as the first pixel
@@ -123,14 +104,25 @@ rect:
 # Output:$2
 # Uses (without preserving)
 # Obs.: Doesn't check parameters
-padress: mul $8 $5 $6	# Stores the multiplication of line by line graphical units amount
+padress: mul $8 $5 $6	# Stores the multiplication of line by line length
 	 add $8 $8 $7 	# Sums $8 with $7 (column)
 	 sll $8 $8 2	# Multiplies $8 by 4
 	 add $2 $8 $4	# Sums $8 with point zero
 	 jr $31
 	 
 
-	 
+# Felipe instance of padress
+# # Input: 
+# 	 $5 Line
+#	 $7 Column
+# Output:$2
+# pads presume that the line length is 128.
+fepads:
+	mul $8 $5 512	# 
+	sll $7 $7 2	# 
+	add $8 $8 $7 	#
+	add $2 $8 $15	# 
+	jr $31
 	 
 	 
 	 
