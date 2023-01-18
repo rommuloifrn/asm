@@ -43,7 +43,6 @@ main:
 	
 	sw $13 0($15)		# Stores original color on the address
 	
-	# -----
 	
 	lui $15 0x1001		# this calcs the pixel
 	addi $5 $0 20 		# line
@@ -58,6 +57,35 @@ main:
 	
 	sw $13 0($15)		# Stores original color on the address
 	
+	# ------
+	
+	lui $15 0x1001		# this calcs the pixel
+	addi $5 $0 20 		# line
+	addi $7 $0 80 		# column
+	jal fepads
+	
+	lw $13 0($2)		# hides sky color in my pocket
+	
+	addi $8 $0 0xffffff	#
+	add $15 $0 $2 		# Stores star on the pixel
+	sw $8 0($15)		#
+	
+	sw $13 0($15)		# Stores original color on the address
+	
+	
+	
+	lui $15 0x1001		# this calcs the pixel
+	addi $5 $0 35 		# line
+	addi $7 $0 20 		# column
+	jal fepads
+	
+	lw $13 0($2)		# hides sky color in my pocket
+	
+	addi $8 $0 0xffffff	#
+	add $15 $0 $2 		# Stores star on the pixel
+	sw $8 0($15)		#
+	
+	sw $13 0($15)		# Stores original color on the address
 	
 	
 	
