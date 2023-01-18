@@ -25,11 +25,55 @@ main:
 	addi $9 $0 32768	# Stores rect last pixel
 	jal rect
 	
-	lui $15 0x1001
-	addi $5 $0 10 # line
-	addi $7 $0 70 # column
+
+	# -----------------------------------------------------------------------------------------------------------------------------------------
+	# brilha brilha estrelinha quero ver vc brilhar
+	poisbrilhemeufilho:
+	
+	lui $15 0x1001		# this calcs the pixel
+	addi $5 $0 10 		# line
+	addi $7 $0 70 		# column
 	jal fepads
 	
+	lw $13 0($2)		# hides sky color in my pocket
+	
+	addi $8 $0 0xffffff	#
+	add $15 $0 $2 		# Stores star on the pixel
+	sw $8 0($15)		#
+	
+	sw $13 0($15)		# Stores original color on the address
+	
+	# -----
+	
+	lui $15 0x1001		# this calcs the pixel
+	addi $5 $0 20 		# line
+	addi $7 $0 40 		# column
+	jal fepads
+	
+	lw $13 0($2)		# hides sky color in my pocket
+	
+	addi $8 $0 0xffffff	#
+	add $15 $0 $2 		# Stores star on the pixel
+	sw $8 0($15)		#
+	
+	sw $13 0($15)		# Stores original color on the address
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	j poisbrilhemeufilho
+	
+	
+	
+	lui $15 0x1001
+	addi $5 $0 20 # line
+	addi $7 $0 70 # column
+	jal fepads
 	
 	addi $8 $0 0xffffff
 	add $15 $0 $2 		# Stores
