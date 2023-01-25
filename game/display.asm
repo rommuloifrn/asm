@@ -6,9 +6,15 @@
 
 
 .text
+
+# Tasks: track the registers the code uses
+# 	     sync the stars
+#	     make the rockets
+#	     make rockets moviment based on a single key
+
 main:
 	lui $15 0x1001		# Stores 0x1001 (start adress) on the upper decimal places of $15
-	addi $9 $0 32768
+	addi $9 $0 32768	# Stores 32768 as pixel amount to bgaaa
 	addi $8 $0 0x000000	# Stores a sky color in $8
 	jal bgaaa
 	
@@ -28,20 +34,28 @@ main:
 
 	# -----------------------------------------------------------------------------------------------------------------------------------------
 	# brilha brilha estrelinha quero ver vc brilhar
-	poisbrilhemeufilho:
+	# general use of registers:
+	# $8 as the color for the modules
+	# $15 as the pixel position
+	
+	# in real i need to let $15 untouched to fepads to calculate the pixels
+	# process of the stars: for each star, store the color and pos. of the pixel (um currently using registers), put white, then after a couple of stars i return the original color to both pixels.
+	
+	
+poisbrilhemeufilho:
 	
 	lui $15 0x1001		# this calcs the pixel
 	addi $5 $0 10 		# line
 	addi $7 $0 70 		# column
-	jal fepads
+	jal fepads			# this returns the pixel on $2
 	
-	lw $13 0($2)		# hides sky color in my pocket
+	lw $10 0($2)		# 1A - stores the original color of the pixel on register
 	
-	addi $8 $0 0xffffff	#
-	add $15 $0 $2 		# Stores star on the pixel
-	sw $8 0($15)		#
+	addi $8 $0 0xffffff	# adds white on $8
+	add $11 $0 $2 		# adds the output of fepads on $11 (maybe i could just use $2 as parameter of sw)
+	sw $8 0($11)		# 2A - Stores white on the pixel
 	
-	sw $13 0($15)		# Stores original color on the address
+	
 	
 	
 	lui $15 0x1001		# this calcs the pixel
@@ -49,28 +63,31 @@ main:
 	addi $7 $0 40 		# column
 	jal fepads
 	
-	lw $13 0($2)		# hides sky color in my pocket
+	lw $12 0($2)		# 1B - stores point color on $12
 	
-	addi $8 $0 0xffffff	#
-	add $15 $0 $2 		# Stores star on the pixel
-	sw $8 0($15)		#
+	addi $8 $0 0xffffff	# adds white on $8
+	add $13 $0 $2 		# adds the output of fepads on $13 (maybe i could just use $2 as parameter of sw)
+	sw $8 0($13)		# 2B - Stores white on the pixel
 	
-	sw $13 0($15)		# Stores original color on the address
 	
-	# ------
+	
+	sw $10 0($11)		# 3A - Stores original color on the first address
+	
+	sw $12 0($13)		# 3B - Stores original color on the address
+	
+	# ------ 20 - 80, 35 - 20.
 	
 	lui $15 0x1001		# this calcs the pixel
 	addi $5 $0 20 		# line
 	addi $7 $0 80 		# column
-	jal fepads
+	jal fepads			# this returns the pixel on $2
 	
-	lw $13 0($2)		# hides sky color in my pocket
+	lw $10 0($2)		# 1A - stores the original color of the pixel on register
 	
-	addi $8 $0 0xffffff	#
-	add $15 $0 $2 		# Stores star on the pixel
-	sw $8 0($15)		#
+	addi $8 $0 0xffffff	# adds white on $8
+	add $11 $0 $2 		# adds the output of fepads on $11 (maybe i could just use $2 as parameter of sw)
+	sw $8 0($11)		# 2A - Stores white on the pixel
 	
-	sw $13 0($15)		# Stores original color on the address
 	
 	
 	
@@ -79,13 +96,17 @@ main:
 	addi $7 $0 20 		# column
 	jal fepads
 	
-	lw $13 0($2)		# hides sky color in my pocket
+	lw $12 0($2)		# 1B - stores point color on $12
 	
-	addi $8 $0 0xffffff	#
-	add $15 $0 $2 		# Stores star on the pixel
-	sw $8 0($15)		#
+	addi $8 $0 0xffffff	# adds white on $8
+	add $13 $0 $2 		# adds the output of fepads on $13 (maybe i could just use $2 as parameter of sw)
+	sw $8 0($13)		# 2B - Stores white on the pixel
 	
-	sw $13 0($15)		# Stores original color on the address
+	
+	
+	sw $10 0($11)		# 3A - Stores original color on the first address
+	
+	sw $12 0($13)		# 3B - Stores original color on the address
 	
 	
 	
@@ -113,6 +134,9 @@ main:
 end:
 	addi $2 $0 10
 	syscall
+	
+	
+# ------------------------------------=========== MODULES =============-------------------------------------------------------------------------------------------------------------
 	
 	
 # Module to put a white point on screen
@@ -185,6 +209,7 @@ padress: mul $8 $5 $6	# Stores the multiplication of line by line length
 
 # Felipe instance of padress
 # # Input: 
+#	 $15 point zero (presumed)
 # 	 $5 Line
 #	 $7 Column
 # Output:$2
